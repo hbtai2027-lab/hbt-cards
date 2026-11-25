@@ -3,8 +3,8 @@
 Each person gets their own page and their own QR code, all hosted from **one** GitHub account and **one** repository.
 
 ```
-https://YOUR-GITHUB-USERNAME.github.io/hbt-cards/dinesh-mani/
-https://YOUR-GITHUB-USERNAME.github.io/hbt-cards/next-person/
+https://hbtai2027-lab.github.io/hbt-cards/dinesh-mani/
+https://hbtai2027-lab.github.io/hbt-cards/next-person/
 ```
 
 ## One-time setup (GitHub Pages)
@@ -12,7 +12,7 @@ https://YOUR-GITHUB-USERNAME.github.io/hbt-cards/next-person/
 1. Create a **public** repository named `hbt-cards` in your GitHub account.
 2. Upload everything in this folder (Add file → Upload files).
 3. Settings → Pages → Source: **Deploy from a branch**, Branch: `main`, folder `/ (root)` → Save.
-4. Wait 1–2 minutes. Your pages are live at `https://YOUR-GITHUB-USERNAME.github.io/hbt-cards/<slug>/`.
+4. Wait 1–2 minutes. Your pages are live at `https://hbtai2027-lab.github.io/hbt-cards/<slug>/`.
 
 ## Adding a person
 
