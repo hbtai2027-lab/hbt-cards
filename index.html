@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1e376d">
+<title>Dinesh Mani · Buyer · HBT Group</title>
+<meta name="description" content="Source smarter, negotiate better, and build reliable supplier networks — from supplier identification and cost benchmarking to procurement strategy and execution.">
+<meta property="og:title" content="Dinesh Mani — Buyer, HBT Group">
+<meta property="og:description" content="Source smarter, negotiate better, and build reliable supplier networks — from supplier identification and cost benchmarking to procurement strategy and execution.">
+<meta property="og:image" content="photo.jpg">
+<link rel="icon" href="../assets/hbt-logo.png">
+<style>
+  :root { --navy:#1e376d; --blue:#08498a; --yellow:#fcd005; --ink:#1b2333; --mute:#5d6678; --line:#e4e8f0; --bg:#eef1f6; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { -webkit-text-size-adjust:100%; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--ink);
+         min-height:100vh; display:flex; justify-content:center; align-items:flex-start; padding:20px 14px 36px; }
+  .card { width:100%; max-width:440px; background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 10px 30px rgba(30,55,109,.12); }
+  .top { background:var(--navy); color:#fff; padding:22px 24px 70px; position:relative; }
+  .top::after { content:""; position:absolute; left:0; right:0; bottom:24px; height:8px; background:var(--yellow); }
+  .brand { display:flex; align-items:center; gap:12px; font-size:13px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; }
+  .brand img { width:44px; height:auto; background:#fff; border-radius:6px; padding:5px; }
+  .who { padding:0 24px; margin-top:-62px; position:relative; }
+  .avatar { width:120px; height:120px; border-radius:50%; border:5px solid #fff; object-fit:cover; display:block; background:#d8dee9;
+            box-shadow:0 4px 14px rgba(30,55,109,.18); }
+  .initials { background:var(--blue); color:#fff; display:grid; place-items:center; font-size:38px; font-weight:700; }
+  h1 { font-size:clamp(24px,6vw,30px); margin-top:14px; color:var(--navy); line-height:1.15; }
+  .role { color:var(--blue); font-weight:600; margin-top:4px; font-size:16px; }
+  .tag { color:var(--mute); line-height:1.55; font-size:15px; margin-top:16px; padding-left:12px; border-left:3px solid var(--yellow); }
+  .hl { list-style:none; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:18px; }
+  .hl li { background:#f4f6fb; border-radius:12px; padding:10px 8px; text-align:center; }
+  .hl b { display:block; color:var(--navy); font-size:18px; }
+  .hl span { display:block; color:var(--mute); font-size:11.5px; line-height:1.3; margin-top:2px; }
+  .scan { display:none; }
+  .actions { padding:22px 16px 20px; }
+  .cta { background:var(--navy); color:#fff; border-radius:16px; padding:20px 18px; margin-bottom:18px; position:relative; overflow:hidden; }
+  .cta::before { content:""; position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--yellow); }
+  .cta h2 { font-size:19px; line-height:1.25; }
+  .cta p { color:#d5ddec; font-size:14px; line-height:1.5; margin-top:6px; }
+  .cta-btns { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+  .cta-btns a { flex:1 1 180px; display:flex; align-items:center; justify-content:center; gap:8px; padding:14px 16px; border-radius:12px;
+                text-decoration:none; font-weight:700; font-size:15px; min-height:50px; }
+  .cta-btns svg { width:19px; height:19px; }
+  .cta-1 { background:var(--yellow); color:var(--navy); flex-grow:1.6 !important; white-space:nowrap; }
+  .cta-1 svg { fill:var(--navy); }
+  .cta-1:hover { background:#ffe04a; }
+  .cta-2 { background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.55); }
+  .cta-2 svg { fill:#fff; }
+  .cta-2:hover { background:rgba(255,255,255,.1); }
+  .links { display:grid; gap:10px; }
+  .row { display:flex; align-items:center; gap:14px; padding:12px 14px; min-height:64px; border:1px solid var(--line); border-radius:14px;
+         text-decoration:none; color:inherit; transition:background .15s,border-color .15s,transform .15s; -webkit-tap-highlight-color:transparent; }
+  .row:hover { background:#f6f8fc; border-color:#c9d3e6; }
+  .row:active { transform:scale(.99); }
+  a:focus-visible { outline:3px solid var(--yellow); outline-offset:2px; }
+  .ic { width:42px; height:42px; flex:none; border-radius:11px; background:#e9eef7; display:grid; place-items:center; }
+  .ic svg { width:21px; height:21px; fill:var(--blue); }
+  .tx { display:flex; flex-direction:column; min-width:0; flex:1; }
+  .tx b { font-size:15px; }
+  .tx small { color:var(--mute); font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:1px; }
+  .go { color:#a3adc0; font-size:26px; line-height:1; }
+  .sv { margin-top:22px; }
+  .sv h2 { font-size:16px; color:var(--navy); margin-bottom:10px; }
+  .sv ul { list-style:none; display:grid; gap:8px; }
+  .sv li { border-left:3px solid var(--yellow); background:#f7f8fb; border-radius:0 10px 10px 0; padding:9px 12px; }
+  .sv li b { display:block; font-size:14px; }
+  .sv li span { display:block; color:var(--mute); font-size:12.5px; line-height:1.4; margin-top:1px; }
+  .sv-note { color:var(--mute); font-size:12.5px; line-height:1.5; margin-top:12px; }
+  .save { margin-top:16px; display:flex; justify-content:center; align-items:center; gap:10px; background:var(--blue); color:#fff;
+          text-decoration:none; font-weight:600; font-size:16px; padding:16px; border-radius:14px; }
+  .save svg { width:20px; height:20px; fill:#fff; }
+  .save:hover { background:var(--navy); }
+  footer { text-align:center; color:var(--mute); font-size:12px; padding:0 0 18px; }
+
+  /* PC / tablet landscape: two columns */
+  @media (min-width: 860px) {
+    body { align-items:center; padding:40px; }
+    .card { max-width:960px; display:grid; grid-template-columns:400px 1fr; grid-template-rows:auto 1fr auto; }
+    .top { grid-column:1 / -1; padding:24px 36px 76px; }
+    .who { padding:0 36px 32px; margin-top:-66px; }
+    .avatar { width:140px; height:140px; }
+    .actions { padding:30px 36px 32px; align-self:stretch; border-left:1px solid var(--line); }
+    .sv ul { grid-template-columns:1fr 1fr; }
+    .scan { display:flex; gap:16px; align-items:center; margin-top:28px; padding:14px; border:1px dashed #c9d3e6; border-radius:14px; }
+    .scan img { width:96px; height:96px; flex:none; }
+    .scan p { font-size:13px; color:var(--mute); line-height:1.45; }
+    .scan b { display:block; color:var(--ink); font-size:14px; margin-bottom:2px; }
+    footer { grid-column:1 / -1; padding-top:4px; }
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <header class="top"><div class="brand"><img src="../assets/hbt-logo.png" alt="HBT logo"><span>HBT Group</span></div></header>
+    <section class="who">
+      <img class="avatar" src="photo.jpg" alt="Photo of Dinesh Mani" width="120" height="120">
+      <h1>Dinesh Mani</h1>
+      <div class="role">Buyer</div>
+      <p class="tag">Source smarter, negotiate better, and build reliable supplier networks — from supplier identification and cost benchmarking to procurement strategy and execution.</p>
+      
+    </section>
+    <div class="actions">
+      <nav class="links" aria-label="Contact options">
+        <a class="row" href="tel:+918072506927">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></span><span class="tx"><b>Call</b><small>+91 80725 06927</small></span><span class="go" aria-hidden="true">›</span>
+        </a>
+        <a class="row" href="https://wa.me/918072506927?text=Hi%20Dinesh%2C%20I%20got%20your%20contact%20from%20your%20HBT%20digital%20card." target="_blank" rel="noopener">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.66 15l-1.3 4.76 4.88-1.28A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.15l-.3-.18-2.9.76.78-2.83-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.25-.12-1.46-.72-1.69-.8s-.39-.12-.55.12-.63.8-.78.96-.29.19-.54.06a6.7 6.7 0 0 1-3.34-2.92c-.25-.43.25-.4.72-1.34a.45.45 0 0 0-.02-.43c-.06-.12-.55-1.33-.76-1.82s-.4-.41-.55-.42h-.47a.9.9 0 0 0-.65.3 2.74 2.74 0 0 0-.85 2.04 4.76 4.76 0 0 0 1 2.53 10.9 10.9 0 0 0 4.17 3.68c1.55.67 2.16.73 2.93.61a2.5 2.5 0 0 0 1.65-1.16 2 2 0 0 0 .14-1.16c-.06-.1-.22-.16-.47-.28z"/></svg></span><span class="tx"><b>WhatsApp</b><small>Send a message</small></span><span class="go" aria-hidden="true">›</span>
+        </a>
+        <a class="row" href="mailto:dinesh.mani@hbt-group.com?subject=Hello%20from%20your%20HBT%20digital%20card">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2.4V17h16V7.4l-8 5.3zM5.2 7 12 11.5 18.8 7z"/></svg></span><span class="tx"><b>Email</b><small>dinesh.mani@hbt-group.com</small></span><span class="go" aria-hidden="true">›</span>
+        </a>
+        <a class="row" href="https://www.linkedin.com/in/dinesh-m-a05b6a151/" target="_blank" rel="noopener">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.06a4.2 4.2 0 0 1 3.76-2.06C21.1 9.04 22 11.6 22 15v6h-4v-5.3c0-1.27-.02-2.9-1.77-2.9s-2.04 1.38-2.04 2.8V21h-4z"/></svg></span><span class="tx"><b>LinkedIn</b><small>View profile</small></span><span class="go" aria-hidden="true">›</span>
+        </a>
+        <a class="row" href="https://bookings.cloud.microsoft/bookwithme/user/39e05b3ac08e430a8d21627256e07fbc%40hbt-group.com?anonymous&amp;ismsaljsauthenabled" target="_blank" rel="noopener">
+          <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h2v2h6V2h2v2h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3zm12 8H5v9h14zM5 6v2h14V6zm2 6h4v4H7z"/></svg></span><span class="tx"><b>Book a meeting</b><small>Pick a time in my calendar</small></span><span class="go" aria-hidden="true">›</span>
+        </a>
+      </nav>
+      <a class="save" href="dinesh-mani.vcf" download="Dinesh Mani.vcf"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm0 10c4.4 0 8 1.8 8 4v3H4v-3c0-2.2 3.6-4 8-4zm7-10h2v2h2v2h-2v2h-2V7h-2V5h2z"/></svg>Save contact</a>
+    </div>
+    <footer>HBT Group</footer>
+  </main>
+</body>
+</html>

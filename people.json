@@ -14,6 +14,96 @@
       "linkedin": "https://www.linkedin.com/in/dinesh-m-a05b6a151/",
       "booking": "https://bookings.cloud.microsoft/bookwithme/user/39e05b3ac08e430a8d21627256e07fbc%40hbt-group.com?anonymous&ismsaljsauthenabled",
       "photo": "photos/dinesh-mani.jpg"
+    },
+    {
+      "slug": "aravind-samikannu",
+      "name": "Aravind Samikannu",
+      "designation": "Business Development Manager",
+      "company": "HBT Engineering",
+      "photo": "photos/aravind-samikannu.jpg",
+      "photo_top": 0.04,
+      "tagline": "I help businesses connect engineering, data and technology to solve operational challenges — bringing 20+ years of industrial experience, including nearly 17 at Caterpillar across design, sourcing and aftermarket.",
+      "highlights": [
+        [
+          "20+ yrs",
+          "Industrial experience"
+        ],
+        [
+          "500k+",
+          "Service hours delivered"
+        ],
+        [
+          "9",
+          "Service lines, one partner"
+        ]
+      ],
+      "email": "aravind.samikannu@hbt-group.com",
+      "linkedin": "https://www.linkedin.com/in/aravind-samikannu-hbt/",
+      "booking": "https://bookings.cloud.microsoft/bookwithme/user/35a75fccebfa45599e59f19d31e7d0c4@hbt-group.com/meetingtype/-h3unlWiD0mfbXvob_gxmw2?bookingcode=223a4515-52b6-42b0-bf2d-aa283565806e&anonymous&ismsaljsauthenabled&ep=mcard",
+      "cta": {
+        "title": "Looking for an engineering & technology partner?",
+        "text": "Tell me what you're trying to decide or deliver — we'll work out the right team and approach together.",
+        "button": "Discuss your requirement",
+        "subject": "Engineering & technology requirement",
+        "body": "Hi Aravind,\n\nI'd like to discuss a requirement with HBT Engineering.\n\nCompany:\nWhat we need:\nTimeline:\nBest time to talk:\n\nThanks,\n"
+      },
+      "services_title": "What HBT Engineering does",
+      "services": [
+        [
+          "AI & Intelligent Solutions",
+          "Generative, agentic and industrial AI"
+        ],
+        [
+          "Data Analytics & BI",
+          "Insights via our Centre of Data Excellence (CoDE)"
+        ],
+        [
+          "Software, SaaS & Digital",
+          "Enterprise tools and digital solutions"
+        ],
+        [
+          "Automation & Systems Integration",
+          "Workflows, embedded systems, firmware and controls"
+        ],
+        [
+          "Engineering & Product Development",
+          "Mechanical, hydraulic, electrical, simulation and testing"
+        ],
+        [
+          "SAP & Enterprise Technology",
+          "ABAP, Basis, application support, data migration"
+        ],
+        [
+          "Technical Documentation & Support",
+          "Publications, spare parts and lifecycle support"
+        ],
+        [
+          "Strategic Sourcing & Supply Chain",
+          "Supplier identification, benchmarking, supply-risk"
+        ],
+        [
+          "Consulting & Research",
+          "Market research, competitive intelligence, advisory"
+        ]
+      ],
+      "services_note": "Chennai-based joint venture of Hauhinco Holding GmbH and Gmmco Technology Services (CK Birla Group), with in-house lab, prototyping, simulation and testing.",
+      "extra_links": [
+        {
+          "icon": "web",
+          "label": "Technology Services",
+          "sub": "hbt-group.com",
+          "url": "https://hbt-group.com/aftermarket-services/technology-services/"
+        },
+        {
+          "icon": "org",
+          "label": "HBT Engineering on LinkedIn",
+          "sub": "Company page",
+          "url": "https://in.linkedin.com/company/hbt-engineering-pvt-ltd"
+        }
+      ],
+      "phone": "+919380084162",
+      "phone_display": "+91 93800 84162",
+      "whatsapp": "919380084162"
     }
   ]
 }

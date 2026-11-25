@@ -29,7 +29,7 @@ def qr_matrix(text):
     return m[rows.min():rows.max() + 1, cols.min():cols.max() + 1]
 
 
-def make_qr(url, out_path):
+def make_qr(url, out_path, frac=0.30):
     m = qr_matrix(url)
     n = m.shape[0]
     size = (n + 2 * QUIET) * MODULE_PX
@@ -41,7 +41,7 @@ def make_qr(url, out_path):
                 x, y = (c + QUIET) * MODULE_PX, (r + QUIET) * MODULE_PX
                 d.rectangle([x, y, x + MODULE_PX - 1, y + MODULE_PX - 1], fill=QR_BLUE)
     # white box in the centre, snapped to whole modules (~ 9% of the code area)
-    box_mod = int(n * 0.30) | 1                      # odd number of modules so it centres
+    box_mod = int(n * frac) | 1                      # odd number of modules so it centres
     start = (n - box_mod) // 2
     x0 = (start + QUIET) * MODULE_PX
     x1 = x0 + box_mod * MODULE_PX
@@ -53,10 +53,16 @@ def make_qr(url, out_path):
     logo = logo.resize((int(logo.width * scale), int(logo.height * scale)), Image.LANCZOS)
     im.paste(logo, (x0 + (x1 - x0 - logo.width) // 2, x0 + (x1 - x0 - logo.height) // 2), logo)
     im.save(out_path)
-    # verify it still scans
-    decoded, _, _ = cv2.QRCodeDetector().detectAndDecode(cv2.imread(out_path))
-    if decoded != url:
-        raise SystemExit(f"QR check failed for {out_path}: read {decoded!r}")
+    # verify it scans: two independent readers, at print size and at phone-camera size
+    img = cv2.imread(out_path)
+    small = cv2.resize(img, (300, 300), interpolation=cv2.INTER_AREA)
+    wechat = cv2.wechat_qrcode_WeChatQRCode()
+    ok = (url in wechat.detectAndDecode(img)[0] and url in wechat.detectAndDecode(small)[0]
+          and cv2.QRCodeDetector().detectAndDecode(small)[0] == url)
+    if not ok:
+        if frac > 0.20:                      # logo too big for this code: shrink and retry
+            return make_qr(url, out_path, round(frac - 0.02, 2))
+        raise SystemExit(f"QR check failed for {out_path}")
     return n
 
 
@@ -76,10 +82,11 @@ def vcard(p, company, url, photo_path=None):
         "BEGIN:VCARD", "VERSION:3.0",
         f"N:{last};{first};;;", f"FN:{p['name']}",
         f"ORG:{company}", f"TITLE:{p['designation']}",
-        f"TEL;TYPE=CELL:{p['phone']}",
         f"EMAIL;TYPE=WORK:{p['email']}",
         f"URL:{url}",
     ]
+    if p.get("phone"):
+        lines.insert(6, f"TEL;TYPE=CELL:{p['phone']}")
     if p.get("linkedin"):
         lines.append(f"X-SOCIALPROFILE;TYPE=linkedin:{p['linkedin']}")
     if photo_path:
@@ -95,6 +102,8 @@ ICONS = {
     "mail": '<path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2.4V17h16V7.4l-8 5.3zM5.2 7 12 11.5 18.8 7z"/>',
     "in": '<path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4V21H3zM9.5 9.5h3.8v1.6h.06a4.2 4.2 0 0 1 3.76-2.06C21.1 9.04 22 11.6 22 15v6h-4v-5.3c0-1.27-.02-2.9-1.77-2.9s-2.04 1.38-2.04 2.8V21h-4z"/>',
     "cal": '<path d="M7 2h2v2h6V2h2v2h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3zm12 8H5v9h14zM5 6v2h14V6zm2 6h4v4H7z"/>',
+    "web": '<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 6h-2.95a15.7 15.7 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.9 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82A13.6 13.6 0 0 1 12 4.04zM4.26 14a8.2 8.2 0 0 1 0-4h3.38a16.5 16.5 0 0 0 0 4zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.99 7.99 0 0 1 5.08 16zM8.03 8H5.08a7.99 7.99 0 0 1 4.33-3.56A15.7 15.7 0 0 0 8.03 8zM12 19.96A14 14 0 0 1 10.09 16h3.82A14 14 0 0 1 12 19.96zM14.34 14H9.66a14.7 14.7 0 0 1 0-4h4.68a14.7 14.7 0 0 1 0 4zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56zM16.36 14a16.5 16.5 0 0 0 0-4h3.38a8.2 8.2 0 0 1 0 4z"/>',
+    "org": '<path d="M3 21V3h12v4h6v14zm2-2h2v-2H5zm0-4h2v-2H5zm0-4h2V9H5zm0-4h2V5H5zm4 12h2v-2H9zm0-4h2v-2H9zm0-4h2V9H9zm0-4h2V5H9zm4 12h6V9h-6v2h2v2h-2v2h2v2h-2z"/>',
     "save": '<path d="M12 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm0 10c4.4 0 8 1.8 8 4v3H4v-3c0-2.2 3.6-4 8-4zm7-10h2v2h2v2h-2v2h-2V7h-2V5h2z"/>',
 }
 
@@ -108,20 +117,56 @@ def page(p, company, has_photo):
     initials = "".join(w[0] for w in p["name"].split()[:2]).upper()
     first = p["name"].split()[0]
     wa_text = f"Hi {first}, I got your contact from your HBT digital card."
-    mail_subject = "Hello from your HBT digital card"
-    links = [
-        ("phone", "Call", p["phone_display"], f"tel:{p['phone']}"),
-        ("chat", "WhatsApp", "Send a message", f"https://wa.me/{p['whatsapp']}?text={quote(wa_text)}"),
-        ("mail", "Email", p["email"], f"mailto:{p['email']}?subject={quote(mail_subject)}"),
-        ("in", "LinkedIn", "View profile", p.get("linkedin")),
-        ("cal", "Book a meeting", "Pick a time in my calendar", p.get("booking")),
-    ]
+    links = []
+    if p.get("phone"):
+        links.append(("phone", "Call", p["phone_display"], f"tel:{p['phone']}"))
+    if p.get("whatsapp"):
+        links.append(("chat", "WhatsApp", "Send a message", f"https://wa.me/{p['whatsapp']}?text={quote(wa_text)}"))
+    links.append(("mail", "Email", p["email"], f"mailto:{p['email']}?subject={quote('Hello from your HBT digital card')}"))
+    if p.get("linkedin"):
+        links.append(("in", "LinkedIn", "View profile", p["linkedin"]))
+    if p.get("booking") and not p.get("cta"):     # the call-to-action box already has "Book a call"
+        links.append(("cal", "Book a meeting", "Pick a time in my calendar", p["booking"]))
+    for x in p.get("extra_links", []):
+        links.append((x["icon"], x["label"], x["sub"], x["url"]))
     rows = "\n".join(
         f'''        <a class="row" href="{e(href)}"{' target="_blank" rel="noopener"' if href.startswith("http") else ''}>
           <span class="ic">{icon(ic)}</span><span class="tx"><b>{e(label)}</b><small>{e(sub)}</small></span><span class="go" aria-hidden="true">›</span>
-        </a>''' for ic, label, sub, href in links if href)
+        </a>''' for ic, label, sub, href in links)
     avatar = (f'<img class="avatar" src="photo.jpg" alt="Photo of {e(p["name"])}" width="120" height="120">'
               if has_photo else f'<div class="avatar initials" aria-hidden="true">{e(initials)}</div>')
+
+    cta_html = ""
+    if p.get("cta"):
+        c = p["cta"]
+        mail = f"mailto:{p['email']}?subject={quote(c['subject'])}&body={quote(c['body'])}"
+        second = ""
+        if p.get("booking"):
+            second = f'<a class="cta-2" href="{e(p["booking"])}" target="_blank" rel="noopener">{icon("cal")}Book a call</a>'
+        elif p.get("whatsapp"):
+            second = f'<a class="cta-2" href="https://wa.me/{e(p["whatsapp"])}?text={quote(wa_text)}" target="_blank" rel="noopener">{icon("chat")}WhatsApp me</a>'
+        cta_html = f'''
+      <section class="cta" aria-label="{e(c['title'])}">
+        <h2>{e(c['title'])}</h2>
+        <p>{e(c['text'])}</p>
+        <div class="cta-btns"><a class="cta-1" href="{e(mail)}">{icon("mail")}{e(c['button'])}</a>{second}</div>
+      </section>'''
+
+    hl_html = ""
+    if p.get("highlights"):
+        hl_html = '<ul class="hl">' + "".join(f"<li><b>{e(h[0])}</b><span>{e(h[1])}</span></li>" for h in p["highlights"]) + "</ul>"
+
+    sv_html = ""
+    if p.get("services"):
+        items = "".join(f"<li><b>{e(s[0])}</b><span>{e(s[1])}</span></li>" for s in p["services"])
+        note = f'<p class="sv-note">{e(p["services_note"])}</p>' if p.get("services_note") else ""
+        sv_html = f'''
+      <section class="sv">
+        <h2>{e(p.get("services_title", "What we do"))}</h2>
+        <ul>{items}</ul>
+        {note}
+      </section>'''
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -136,7 +181,7 @@ def page(p, company, has_photo):
 <link rel="icon" href="../assets/hbt-logo.png">
 <style>
   :root {{ --navy:#1e376d; --blue:#08498a; --yellow:#fcd005; --ink:#1b2333; --mute:#5d6678; --line:#e4e8f0; --bg:#eef1f6; }}
-  * {{ box-sizing:border-box; margin:0; }}
+  * {{ box-sizing:border-box; margin:0; padding:0; }}
   html {{ -webkit-text-size-adjust:100%; }}
   body {{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--ink);
          min-height:100vh; display:flex; justify-content:center; align-items:flex-start; padding:20px 14px 36px; }}
@@ -152,21 +197,46 @@ def page(p, company, has_photo):
   h1 {{ font-size:clamp(24px,6vw,30px); margin-top:14px; color:var(--navy); line-height:1.15; }}
   .role {{ color:var(--blue); font-weight:600; margin-top:4px; font-size:16px; }}
   .tag {{ color:var(--mute); line-height:1.55; font-size:15px; margin-top:16px; padding-left:12px; border-left:3px solid var(--yellow); }}
+  .hl {{ list-style:none; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:18px; }}
+  .hl li {{ background:#f4f6fb; border-radius:12px; padding:10px 8px; text-align:center; }}
+  .hl b {{ display:block; color:var(--navy); font-size:18px; }}
+  .hl span {{ display:block; color:var(--mute); font-size:11.5px; line-height:1.3; margin-top:2px; }}
   .scan {{ display:none; }}
   .actions {{ padding:22px 16px 20px; }}
+  .cta {{ background:var(--navy); color:#fff; border-radius:16px; padding:20px 18px; margin-bottom:18px; position:relative; overflow:hidden; }}
+  .cta::before {{ content:""; position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--yellow); }}
+  .cta h2 {{ font-size:19px; line-height:1.25; }}
+  .cta p {{ color:#d5ddec; font-size:14px; line-height:1.5; margin-top:6px; }}
+  .cta-btns {{ display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }}
+  .cta-btns a {{ flex:1 1 180px; display:flex; align-items:center; justify-content:center; gap:8px; padding:14px 16px; border-radius:12px;
+                text-decoration:none; font-weight:700; font-size:15px; min-height:50px; }}
+  .cta-btns svg {{ width:19px; height:19px; }}
+  .cta-1 {{ background:var(--yellow); color:var(--navy); flex-grow:1.6 !important; white-space:nowrap; }}
+  .cta-1 svg {{ fill:var(--navy); }}
+  .cta-1:hover {{ background:#ffe04a; }}
+  .cta-2 {{ background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.55); }}
+  .cta-2 svg {{ fill:#fff; }}
+  .cta-2:hover {{ background:rgba(255,255,255,.1); }}
   .links {{ display:grid; gap:10px; }}
   .row {{ display:flex; align-items:center; gap:14px; padding:12px 14px; min-height:64px; border:1px solid var(--line); border-radius:14px;
          text-decoration:none; color:inherit; transition:background .15s,border-color .15s,transform .15s; -webkit-tap-highlight-color:transparent; }}
   .row:hover {{ background:#f6f8fc; border-color:#c9d3e6; }}
   .row:active {{ transform:scale(.99); }}
-  .row:focus-visible, .save:focus-visible {{ outline:3px solid var(--yellow); outline-offset:2px; }}
+  a:focus-visible {{ outline:3px solid var(--yellow); outline-offset:2px; }}
   .ic {{ width:42px; height:42px; flex:none; border-radius:11px; background:#e9eef7; display:grid; place-items:center; }}
   .ic svg {{ width:21px; height:21px; fill:var(--blue); }}
   .tx {{ display:flex; flex-direction:column; min-width:0; flex:1; }}
   .tx b {{ font-size:15px; }}
   .tx small {{ color:var(--mute); font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:1px; }}
   .go {{ color:#a3adc0; font-size:26px; line-height:1; }}
-  .save {{ margin-top:14px; display:flex; justify-content:center; align-items:center; gap:10px; background:var(--blue); color:#fff;
+  .sv {{ margin-top:22px; }}
+  .sv h2 {{ font-size:16px; color:var(--navy); margin-bottom:10px; }}
+  .sv ul {{ list-style:none; display:grid; gap:8px; }}
+  .sv li {{ border-left:3px solid var(--yellow); background:#f7f8fb; border-radius:0 10px 10px 0; padding:9px 12px; }}
+  .sv li b {{ display:block; font-size:14px; }}
+  .sv li span {{ display:block; color:var(--mute); font-size:12.5px; line-height:1.4; margin-top:1px; }}
+  .sv-note {{ color:var(--mute); font-size:12.5px; line-height:1.5; margin-top:12px; }}
+  .save {{ margin-top:16px; display:flex; justify-content:center; align-items:center; gap:10px; background:var(--blue); color:#fff;
           text-decoration:none; font-weight:600; font-size:16px; padding:16px; border-radius:14px; }}
   .save svg {{ width:20px; height:20px; fill:#fff; }}
   .save:hover {{ background:var(--navy); }}
@@ -175,11 +245,12 @@ def page(p, company, has_photo):
   /* PC / tablet landscape: two columns */
   @media (min-width: 860px) {{
     body {{ align-items:center; padding:40px; }}
-    .card {{ max-width:940px; display:grid; grid-template-columns:400px 1fr; grid-template-rows:auto 1fr auto; }}
+    .card {{ max-width:960px; display:grid; grid-template-columns:400px 1fr; grid-template-rows:auto 1fr auto; }}
     .top {{ grid-column:1 / -1; padding:24px 36px 76px; }}
     .who {{ padding:0 36px 32px; margin-top:-66px; }}
     .avatar {{ width:140px; height:140px; }}
     .actions {{ padding:30px 36px 32px; align-self:stretch; border-left:1px solid var(--line); }}
+    .sv ul {{ grid-template-columns:1fr 1fr; }}
     .scan {{ display:flex; gap:16px; align-items:center; margin-top:28px; padding:14px; border:1px dashed #c9d3e6; border-radius:14px; }}
     .scan img {{ width:96px; height:96px; flex:none; }}
     .scan p {{ font-size:13px; color:var(--mute); line-height:1.45; }}
@@ -196,12 +267,12 @@ def page(p, company, has_photo):
       <h1>{e(p['name'])}</h1>
       <div class="role">{e(p['designation'])}</div>
       <p class="tag">{e(p['tagline'])}</p>
-      <div class="scan"><img src="qr.png" alt="QR code for this page"><p><b>Open on your phone</b>Scan to save {e(first)}'s contact or message on WhatsApp.</p></div>
+      {hl_html}
     </section>
-    <div class="actions">
+    <div class="actions">{cta_html}
       <nav class="links" aria-label="Contact options">
 {rows}
-      </nav>
+      </nav>{sv_html}
       <a class="save" href="{e(p['slug'])}.vcf" download="{e(p['name'])}.vcf">{icon('save')}Save contact</a>
     </div>
     <footer>{e(company)}</footer>
@@ -216,23 +287,29 @@ def main():
     base = cfg["base_url"].rstrip("/")
     os.makedirs(os.path.join(ROOT, "qr"), exist_ok=True)
     for p in cfg["people"]:
+        company = p.get("company", cfg["company"])
         url = f"{base}/{p['slug']}/"
         folder = os.path.join(ROOT, p["slug"])
         os.makedirs(folder, exist_ok=True)
         photo = os.path.join(ROOT, p["photo"]) if p.get("photo") else None
         if photo:
             img = Image.open(photo).convert("RGB")
-            s = min(img.size)                                    # centre square crop
-            img = img.crop(((img.width - s) // 2, (img.height - s) // 2, (img.width + s) // 2, (img.height + s) // 2))
+            s = min(img.size)
+            x0 = (img.width - s) // 2
+            # portrait photos: keep the head in frame ("photo_top" = fraction of spare height above the crop)
+            y0 = int((img.height - s) * p.get("photo_top", 0.5))
+            img = img.crop((x0, y0, x0 + s, y0 + s))
             img.resize((400, 400), Image.LANCZOS).save(os.path.join(folder, "photo.jpg"), quality=88)
             small = os.path.join(folder, "_vcard.jpg")
-            img.resize((240, 240), Image.LANCZOS).save(small, quality=82)   # keep the .vcf small
+            img.resize((240, 240), Image.LANCZOS).save(small, quality=82)
         qr_path = os.path.join(ROOT, "qr", f"{p['slug']}.png")
         n = make_qr(url, qr_path)
-        shutil.copy(qr_path, os.path.join(folder, "qr.png"))
-        open(os.path.join(folder, "index.html"), "w", encoding="utf-8").write(page(p, cfg["company"], bool(photo)))
+        old = os.path.join(folder, "qr.png")
+        if os.path.exists(old):
+            os.remove(old)
+        open(os.path.join(folder, "index.html"), "w", encoding="utf-8").write(page(p, company, bool(photo)))
         open(os.path.join(folder, f"{p['slug']}.vcf"), "w", encoding="utf-8", newline="").write(
-            vcard(p, cfg["company"], url, small if photo else None))
+            vcard(p, company, url, small if photo else None))
         if photo:
             os.remove(small)
         print(f"{p['name']:<24} {url}  (QR {n}x{n}, scan check OK)")
