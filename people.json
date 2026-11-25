@@ -1,0 +1,19 @@
+{
+  "base_url": "https://YOUR-GITHUB-USERNAME.github.io/hbt-cards",
+  "company": "HBT Group",
+  "people": [
+    {
+      "slug": "dinesh-mani",
+      "name": "Dinesh Mani",
+      "designation": "Buyer",
+      "tagline": "Source smarter, negotiate better, and build reliable supplier networks — from supplier identification and cost benchmarking to procurement strategy and execution.",
+      "phone": "+918072506927",
+      "phone_display": "+91 80725 06927",
+      "whatsapp": "918072506927",
+      "email": "dinesh.mani@hbt-group.com",
+      "linkedin": "https://www.linkedin.com/in/dinesh-m-a05b6a151/",
+      "booking": "https://bookings.cloud.microsoft/bookwithme/user/39e05b3ac08e430a8d21627256e07fbc%40hbt-group.com?anonymous&ismsaljsauthenabled",
+      "photo": "photos/dinesh-mani.jpg"
+    }
+  ]
+}
